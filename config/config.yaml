@@ -1,0 +1,128 @@
+# Configuración del Ranking Chileno de Ciencias Sociales
+
+# Disciplinas a incluir (keywords para búsqueda)
+disciplinas:
+  - sociología
+  - sociology
+  - ciencia política
+  - political science
+  - economía
+  - economics
+  - antropología
+  - anthropology
+  - psicología
+  - psychology
+  - trabajo social
+  - social work
+  - historia
+  - history
+  - geografía
+  - geography
+  - comunicación
+  - communication
+  - journalism
+  - educación
+  - education
+  - demografía
+  - demography
+  - administración pública
+  - public administration
+  - public policy
+  - relaciones internacionales
+  - international relations
+  - estudios urbanos
+  - urban studies
+  - estudios de género
+  - gender studies
+  - ciencias sociales
+  - social sciences
+
+# Universidades chilenas (para búsqueda por afiliación)
+universidades:
+  # Universidades tradicionales CRUCH
+  - Universidad de Chile
+  - Pontificia Universidad Católica de Chile
+  - Universidad de Concepción
+  - Pontificia Universidad Católica de Valparaíso
+  - Universidad Técnica Federico Santa María
+  - Universidad de Santiago de Chile
+  - Universidad Austral de Chile
+  - Universidad Católica del Norte
+  - Universidad de Valparaíso
+  - Universidad de Antofagasta
+  - Universidad de La Serena
+  - Universidad del Bío-Bío
+  - Universidad de La Frontera
+  - Universidad de Magallanes
+  - Universidad de Talca
+  - Universidad de Atacama
+  - Universidad de Tarapacá
+  - Universidad Arturo Prat
+  - Universidad Metropolitana de Ciencias de la Educación
+  - Universidad de Playa Ancha
+  - Universidad Tecnológica Metropolitana
+  - Universidad de Los Lagos
+  - Universidad Católica del Maule
+  - Universidad Católica de la Santísima Concepción
+  - Universidad Católica de Temuco
+  - Universidad de O'Higgins
+  - Universidad de Aysén
+
+  # Universidades privadas acreditadas
+  - Universidad Diego Portales
+  - Universidad Adolfo Ibáñez
+  - Universidad Alberto Hurtado
+  - Universidad Andrés Bello
+  - Universidad del Desarrollo
+  - Universidad Mayor
+  - Universidad de los Andes
+  - Universidad San Sebastián
+  - Universidad Finis Terrae
+  - Universidad Central de Chile
+  - Universidad Academia de Humanismo Cristiano
+  - Universidad ARCIS
+  - Universidad Bernardo O'Higgins
+  - Universidad Autónoma de Chile
+  - Universidad Santo Tomás
+  - Universidad Gabriela Mistral
+  - Universidad SEK
+
+  # Centros de investigación
+  - CIEPLAN
+  - FLACSO Chile
+  - CEP Chile
+  - COES
+  - CIIR
+  - PNUD Chile
+  - CEPAL
+  - Fundación Sol
+  - Libertad y Desarrollo
+  - Instituto de Estudios Avanzados
+  - Centro de Estudios Públicos
+  - MIDE UC
+  - CEPPE UC
+  - DESUC
+
+# Variantes de afiliación para búsqueda
+afiliaciones_chile:
+  - Chile
+  - Santiago
+  - Valparaíso
+  - Concepción
+  - chilena
+  - chileno
+
+# Configuración de scraping
+scraping:
+  delay_min: 2  # segundos mínimos entre requests
+  delay_max: 5  # segundos máximos entre requests
+  max_retries: 3
+  timeout: 30
+
+# Output
+output:
+  format:
+    - csv
+    - xlsx
+    - json
+  ranking_file: "ranking_ciencias_sociales"
