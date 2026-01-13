@@ -16,7 +16,7 @@ import re
 from time import sleep
 
 # Configuración
-H_INDEX_MINIMO = 2  # Solo investigadores con h-index >= 2
+H_INDEX_MINIMO = 1  # Solo investigadores con h-index >= 1
 OUTPUT_DIR = Path(__file__).parent.parent / "data" / "output"
 
 # Investigadores a excluir (errores de OpenAlex o no son chilenos)
@@ -78,15 +78,37 @@ CAMPOS_EXCLUIR = [
     "Neuroscience",
 ]
 
-# Scholar IDs conocidos (verificados manualmente via Google)
+# Scholar IDs conocidos (verificados manualmente via Google Search)
 SCHOLAR_IDS_CONOCIDOS = {
+    # Top investigadores
     "David Altman": "oZGkFZoAAAAJ",
+    "Darío Páez": "KVva2AIAAAAJ",
     "Cristóbal Rovira Kaltwasser": "RdXwR1EAAAAJ",
+    "Alejandro Micco": "BUc-k1MAAAAJ",
+    "Claudio E. Montenegro": "qO3kU6UAAAAJ",
     "Patricio Navia": "IBcs-ZwAAAAJ",
-    "Daniel Chernilo": "sHV_7OoAAAAJ",
+    "José Joaquín Brunner": "TX3te0QAAAAJ",
+    "Alejandra Mizala": "zmkA7uwAAAAJ",
+    "Daniel Chernilo": "QASCP9kAAAAJ",
+    "Vicente Sisto": "g_QWxVAAAAAJ",
+    "Paula Ascorra": "YVBJgLwAAAAJ",
+    "Aldo Mascareño": "7H4k-70AAAAJ",
+    "Mahía Saracostti": "pWZjC4AAAAAJ",
     "Juan Carlos Castillo": "CPJ0qfQAAAAJ",
     "Nicolás M. Somma": "yyr6ge0AAAAJ",
+    "Cristóbal Villalobos": "PM99kxMAAAAJ",
     "Mauricio Morales": "BPVbhToAAAAJ",
+    "Javier Núñez": "2a__7xUAAAAJ",
+    "Aldo Madariaga": "n0UQqa4AAAAJ",
+    "Jenny Assaél": "4bK5XUQAAAAJ",
+    "Cristián Parker Gumucio": "8kIJIa4AAAAJ",
+    "Cynthia Duk": "bxBuLfMAAAAJ",
+    "Nicole Jenne": "HaX6qs4AAAAJ",
+    "Kathya Araujo": "nukHXv0AAAAJ",
+    "Antonio Stecher": "rFUqIdsAAAAJ",
+    "Felipe Link": "9cxoZ8MAAAAJ",
+    "Cristián Cox": "9b8DoS8AAAAJ",
+    # Otros investigadores
     "Matías Bargsted": "0oYjLYEAAAAJ",
     "Alfredo Joignant": "C6i7344AAAAJ",
     "Emmanuelle Barozet": "NLiNCD0AAAAJ",
@@ -94,13 +116,10 @@ SCHOLAR_IDS_CONOCIDOS = {
     "Sergio Toro": "F7Dguu4AAAAJ",
     "Ricardo Gamboa": "ckIjzZQAAAAJ",
     "Magdalena Saldaña": "UknWOrEAAAAJ",
-    "Alejandra Mizala": "zmkA7uwAAAAJ",
-    "Nicole Jenne": "HaX6qs4AAAAJ",
     "Catherine Reyes-Housholder": "gkHNPiwAAAAJ",
     "Octavio Avendaño": "gj1MwGwAAAAJ",
     "Lisa Zanotti": "JD_X4KYAAAAJ",
-    "Alejandro Micco": "BUc-k1MAAAAJ",
-    "Claudio E. Montenegro": "qO3kU6UAAAAJ",
+    "Carla Fardella": "h9ECWD4AAAAJ",
 }
 
 

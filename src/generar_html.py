@@ -434,7 +434,7 @@ def generar_html(investigadores):
         <div class="description">
             <p>Este ranking mide el impacto academico de investigadores en ciencias sociales afiliados a instituciones chilenas, utilizando datos de <a href="https://openalex.org/" target="_blank">OpenAlex</a>.</p>
             <p>El proyecto se inspira en el <a href="https://github.com/bgonzalezbustamante/CPS-Ranking" target="_blank">CPS-Ranking</a> de Bastian Gonzalez-Bustamante, expandiendo la cobertura desde ciencia politica hacia todas las ciencias sociales: sociologia, economia, psicologia, educacion, comunicacion y mas.</p>
-            <p class="meta">Actualizacion: {datetime.now().strftime("%B %Y")} | Fuente: OpenAlex API | H-index minimo: 2</p>
+            <p class="meta">Actualizacion: {datetime.now().strftime("%B %Y")} | Fuente: OpenAlex API | H-index minimo: 1</p>
         </div>
 
         <div class="stats">
