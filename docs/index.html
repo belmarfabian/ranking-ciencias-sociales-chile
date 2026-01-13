@@ -173,6 +173,25 @@
         .footer-meta { font-size: 0.65rem; color: #999; }
         .footer-meta a { color: #666; }
 
+        .download-btn {
+            padding: 4px 10px;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            color: #333;
+            text-decoration: none;
+            margin-left: auto;
+        }
+        .download-btn:hover { background: #eee; border-color: #ccc; }
+
+        .inst-table { margin-top: 12px; }
+        .inst-table th, .inst-table td { padding: 6px 10px 6px 0; }
+        .inst-name { font-weight: 600; color: #111; }
+        .section { display: none; }
+        .section.active { display: block; }
+
         @media (max-width: 768px) {
             header h1 { font-size: 1.1rem; }
             .stats { flex-wrap: wrap; gap: 16px; }
@@ -219,25 +238,37 @@
         </div>
 
         <div class="tabs">
-            <div class="tab active" onclick="setView('hindex')">Por H-index</div>
-            <div class="tab" onclick="setView('citations')">Por Citas</div>
+            <div class="tab active" onclick="setSection('researchers')">Investigadores</div>
+            <div class="tab" onclick="setSection('institutions')">Por Institucion</div>
         </div>
 
-        <div class="filters">
-            <label for="filter-discipline">Disciplina:</label>
-            <select id="filter-discipline" onchange="filterTable()">
-                <option value="">Todas</option>
-                <option value="C.Pol">Ciencia Politica</option>
-                <option value="Soc">Sociologia</option>
-                <option value="Econ">Economia</option>
-                <option value="Adm">Administracion</option>
-                <option value="Psic">Psicologia</option>
-                <option value="Educ">Educacion</option>
-                <option value="Hum">Humanidades</option>
-                <option value="Com">Comunicacion</option>
-            </select>
-            <input type="text" id="search" placeholder="Buscar nombre o institucion..." oninput="filterTable()">
-        </div>
+        <div id="section-researchers" class="section active">
+            <div class="filters">
+                <label for="filter-discipline">Disciplina:</label>
+                <select id="filter-discipline" onchange="filterTable()">
+                    <option value="">Todas</option>
+                    <option value="C.Pol">Ciencia Politica</option>
+                    <option value="Soc">Sociologia</option>
+                    <option value="Econ">Economia</option>
+                    <option value="Adm">Administracion</option>
+                    <option value="Psic">Psicologia</option>
+                    <option value="Educ">Educacion</option>
+                    <option value="Hum">Humanidades</option>
+                    <option value="Com">Comunicacion</option>
+                </select>
+                <label for="filter-inst">Institucion:</label>
+                <select id="filter-inst" onchange="filterTable()">
+                    <option value="">Todas</option>
+                </select>
+                <input type="text" id="search" placeholder="Buscar nombre..." oninput="filterTable()">
+                <label style="margin-left: 8px;">Ordenar:</label>
+                <select id="sort-by" onchange="filterTable()">
+                    <option value="hindex">H-index</option>
+                    <option value="citations">Citas</option>
+                    <option value="works">Trabajos</option>
+                </select>
+                <button class="download-btn" onclick="downloadCSV()">Descargar CSV</button>
+            </div>
 
         <div class="table-wrapper">
             <table>
@@ -255,6 +286,36 @@
                 <tbody id="ranking-body">
                 </tbody>
             </table>
+        </div>
+        </div>
+
+        <div id="section-institutions" class="section">
+            <div class="filters">
+                <label style="margin-left: 0;">Ordenar por:</label>
+                <select id="sort-inst" onchange="renderInstTable()">
+                    <option value="researchers">N de investigadores</option>
+                    <option value="h_avg">H-index promedio</option>
+                    <option value="h_max">H-index maximo</option>
+                    <option value="citations">Citas totales</option>
+                </select>
+            </div>
+            <div class="table-wrapper">
+                <table class="inst-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 35px;">#</th>
+                            <th>Institucion</th>
+                            <th class="num">Investigadores</th>
+                            <th class="num">H-index prom.</th>
+                            <th class="num">H-index max.</th>
+                            <th class="num">Citas</th>
+                            <th class="num">Trabajos</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inst-body">
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <footer>
@@ -11410,9 +11471,652 @@
                         "works": 9
             }
 ];
+        const institutions = [
+            {
+                        "name": "U. Chile",
+                        "researchers": 178,
+                        "h_avg": 4.8,
+                        "h_max": 34,
+                        "citations": 34041,
+                        "works": 5195
+            },
+            {
+                        "name": "PUC Chile",
+                        "researchers": 120,
+                        "h_avg": 5.7,
+                        "h_max": 54,
+                        "citations": 48126,
+                        "works": 3447
+            },
+            {
+                        "name": "USACH",
+                        "researchers": 52,
+                        "h_avg": 5.2,
+                        "h_max": 18,
+                        "citations": 9362,
+                        "works": 1605
+            },
+            {
+                        "name": "UDP",
+                        "researchers": 35,
+                        "h_avg": 7.4,
+                        "h_max": 25,
+                        "citations": 11604,
+                        "works": 1927
+            },
+            {
+                        "name": "UdeC",
+                        "researchers": 28,
+                        "h_avg": 3.5,
+                        "h_max": 12,
+                        "citations": 1670,
+                        "works": 468
+            },
+            {
+                        "name": "Alberto Hurtado Univ",
+                        "researchers": 27,
+                        "h_avg": 4.6,
+                        "h_max": 15,
+                        "citations": 3216,
+                        "works": 833
+            },
+            {
+                        "name": "UNAB",
+                        "researchers": 25,
+                        "h_avg": 6.2,
+                        "h_max": 53,
+                        "citations": 12823,
+                        "works": 1185
+            },
+            {
+                        "name": "PUCV",
+                        "researchers": 22,
+                        "h_avg": 5.4,
+                        "h_max": 18,
+                        "citations": 3813,
+                        "works": 709
+            },
+            {
+                        "name": "UBB",
+                        "researchers": 21,
+                        "h_avg": 4.1,
+                        "h_max": 10,
+                        "citations": 1811,
+                        "works": 510
+            },
+            {
+                        "name": "UACh",
+                        "researchers": 20,
+                        "h_avg": 4.4,
+                        "h_max": 9,
+                        "citations": 2225,
+                        "works": 658
+            },
+            {
+                        "name": "UFRO",
+                        "researchers": 19,
+                        "h_avg": 3.3,
+                        "h_max": 5,
+                        "citations": 827,
+                        "works": 243
+            },
+            {
+                        "name": "UAI",
+                        "researchers": 18,
+                        "h_avg": 5.3,
+                        "h_max": 19,
+                        "citations": 3776,
+                        "works": 379
+            },
+            {
+                        "name": "Catholic University ",
+                        "researchers": 17,
+                        "h_avg": 4.2,
+                        "h_max": 17,
+                        "citations": 1856,
+                        "works": 490
+            },
+            {
+                        "name": "Universidad Católica",
+                        "researchers": 15,
+                        "h_avg": 3.8,
+                        "h_max": 10,
+                        "citations": 883,
+                        "works": 475
+            },
+            {
+                        "name": "United Nations Econo",
+                        "researchers": 15,
+                        "h_avg": 4.1,
+                        "h_max": 7,
+                        "citations": 2026,
+                        "works": 269
+            },
+            {
+                        "name": "UV",
+                        "researchers": 14,
+                        "h_avg": 3.9,
+                        "h_max": 7,
+                        "citations": 937,
+                        "works": 295
+            },
+            {
+                        "name": "USS",
+                        "researchers": 14,
+                        "h_avg": 3.9,
+                        "h_max": 7,
+                        "citations": 1426,
+                        "works": 332
+            },
+            {
+                        "name": "UC Temuco",
+                        "researchers": 13,
+                        "h_avg": 4.4,
+                        "h_max": 16,
+                        "citations": 1777,
+                        "works": 408
+            },
+            {
+                        "name": "UA Chile",
+                        "researchers": 12,
+                        "h_avg": 5.2,
+                        "h_max": 19,
+                        "citations": 4196,
+                        "works": 390
+            },
+            {
+                        "name": "U. Los Lagos",
+                        "researchers": 12,
+                        "h_avg": 3.4,
+                        "h_max": 8,
+                        "citations": 699,
+                        "works": 288
+            },
+            {
+                        "name": "UCEN",
+                        "researchers": 11,
+                        "h_avg": 3.9,
+                        "h_max": 13,
+                        "citations": 1359,
+                        "works": 224
+            },
+            {
+                        "name": "University of Tarapa",
+                        "researchers": 11,
+                        "h_avg": 4.3,
+                        "h_max": 8,
+                        "citations": 899,
+                        "works": 323
+            },
+            {
+                        "name": "ULAR",
+                        "researchers": 11,
+                        "h_avg": 3.2,
+                        "h_max": 6,
+                        "citations": 408,
+                        "works": 286
+            },
+            {
+                        "name": "CECS",
+                        "researchers": 10,
+                        "h_avg": 8.2,
+                        "h_max": 16,
+                        "citations": 6240,
+                        "works": 508
+            },
+            {
+                        "name": "U. Talca",
+                        "researchers": 10,
+                        "h_avg": 5.3,
+                        "h_max": 14,
+                        "citations": 1517,
+                        "works": 255
+            },
+            {
+                        "name": "UCN",
+                        "researchers": 10,
+                        "h_avg": 4.8,
+                        "h_max": 9,
+                        "citations": 1755,
+                        "works": 264
+            },
+            {
+                        "name": "Academy of Christian",
+                        "researchers": 10,
+                        "h_avg": 2.3,
+                        "h_max": 3,
+                        "citations": 233,
+                        "works": 139
+            },
+            {
+                        "name": "University of the Am",
+                        "researchers": 9,
+                        "h_avg": 4.1,
+                        "h_max": 12,
+                        "citations": 916,
+                        "works": 234
+            },
+            {
+                        "name": "U. Mayor",
+                        "researchers": 9,
+                        "h_avg": 6.0,
+                        "h_max": 12,
+                        "citations": 1585,
+                        "works": 273
+            },
+            {
+                        "name": "UPLA",
+                        "researchers": 9,
+                        "h_avg": 3.8,
+                        "h_max": 8,
+                        "citations": 557,
+                        "works": 168
+            },
+            {
+                        "name": "Dirección de Investi",
+                        "researchers": 9,
+                        "h_avg": 3.9,
+                        "h_max": 8,
+                        "citations": 586,
+                        "works": 254
+            },
+            {
+                        "name": "UMAG",
+                        "researchers": 9,
+                        "h_avg": 3.1,
+                        "h_max": 5,
+                        "citations": 298,
+                        "works": 119
+            },
+            {
+                        "name": "Centro Regional de D",
+                        "researchers": 9,
+                        "h_avg": 2.2,
+                        "h_max": 3,
+                        "citations": 192,
+                        "works": 115
+            },
+            {
+                        "name": "Arturo Prat Universi",
+                        "researchers": 8,
+                        "h_avg": 4.1,
+                        "h_max": 7,
+                        "citations": 513,
+                        "works": 120
+            },
+            {
+                        "name": "University of O'Higg",
+                        "researchers": 8,
+                        "h_avg": 4.5,
+                        "h_max": 6,
+                        "citations": 814,
+                        "works": 213
+            },
+            {
+                        "name": "Metropolitan Univers",
+                        "researchers": 8,
+                        "h_avg": 2.8,
+                        "h_max": 4,
+                        "citations": 310,
+                        "works": 94
+            },
+            {
+                        "name": "UBO",
+                        "researchers": 7,
+                        "h_avg": 5.4,
+                        "h_max": 15,
+                        "citations": 1124,
+                        "works": 257
+            },
+            {
+                        "name": "USM",
+                        "researchers": 7,
+                        "h_avg": 5.9,
+                        "h_max": 12,
+                        "citations": 1612,
+                        "works": 250
+            },
+            {
+                        "name": "U. Andes",
+                        "researchers": 6,
+                        "h_avg": 6.3,
+                        "h_max": 15,
+                        "citations": 1196,
+                        "works": 378
+            },
+            {
+                        "name": "Universidad Adventis",
+                        "researchers": 6,
+                        "h_avg": 4.0,
+                        "h_max": 5,
+                        "citations": 472,
+                        "works": 176
+            },
+            {
+                        "name": "University of Atacam",
+                        "researchers": 5,
+                        "h_avg": 6.0,
+                        "h_max": 18,
+                        "citations": 2638,
+                        "works": 202
+            },
+            {
+                        "name": "UST",
+                        "researchers": 5,
+                        "h_avg": 3.6,
+                        "h_max": 5,
+                        "citations": 244,
+                        "works": 164
+            },
+            {
+                        "name": "Fundación Chile",
+                        "researchers": 4,
+                        "h_avg": 4.8,
+                        "h_max": 8,
+                        "citations": 437,
+                        "works": 241
+            },
+            {
+                        "name": "UDD",
+                        "researchers": 4,
+                        "h_avg": 4.2,
+                        "h_max": 7,
+                        "citations": 597,
+                        "works": 84
+            },
+            {
+                        "name": "Millennium Institute",
+                        "researchers": 4,
+                        "h_avg": 4.5,
+                        "h_max": 5,
+                        "citations": 296,
+                        "works": 158
+            },
+            {
+                        "name": "Viña del Mar Univers",
+                        "researchers": 4,
+                        "h_avg": 3.5,
+                        "h_max": 5,
+                        "citations": 236,
+                        "works": 112
+            },
+            {
+                        "name": "ICM",
+                        "researchers": 3,
+                        "h_avg": 5.0,
+                        "h_max": 7,
+                        "citations": 286,
+                        "works": 69
+            },
+            {
+                        "name": "Clínica Alemana",
+                        "researchers": 3,
+                        "h_avg": 3.0,
+                        "h_max": 5,
+                        "citations": 188,
+                        "works": 20
+            },
+            {
+                        "name": "U. Finis Terrae",
+                        "researchers": 3,
+                        "h_avg": 2.3,
+                        "h_max": 3,
+                        "citations": 103,
+                        "works": 14
+            },
+            {
+                        "name": "Hospital Las Higuera",
+                        "researchers": 2,
+                        "h_avg": 14.5,
+                        "h_max": 27,
+                        "citations": 2195,
+                        "works": 371
+            },
+            {
+                        "name": "Institute of Ecology",
+                        "researchers": 2,
+                        "h_avg": 4.5,
+                        "h_max": 7,
+                        "citations": 287,
+                        "works": 99
+            },
+            {
+                        "name": "Miguel de Cervantes ",
+                        "researchers": 2,
+                        "h_avg": 4.0,
+                        "h_max": 5,
+                        "citations": 177,
+                        "works": 64
+            },
+            {
+                        "name": "University of La Ser",
+                        "researchers": 2,
+                        "h_avg": 3.5,
+                        "h_max": 4,
+                        "citations": 62,
+                        "works": 65
+            },
+            {
+                        "name": "University of Art an",
+                        "researchers": 2,
+                        "h_avg": 3.5,
+                        "h_max": 4,
+                        "citations": 96,
+                        "works": 66
+            },
+            {
+                        "name": "Instituto Nacional d",
+                        "researchers": 2,
+                        "h_avg": 3.0,
+                        "h_max": 3,
+                        "citations": 122,
+                        "works": 30
+            },
+            {
+                        "name": "Facultad Latinoameri",
+                        "researchers": 2,
+                        "h_avg": 2.5,
+                        "h_max": 3,
+                        "citations": 61,
+                        "works": 29
+            },
+            {
+                        "name": "Ministry of Educatio",
+                        "researchers": 2,
+                        "h_avg": 2.5,
+                        "h_max": 3,
+                        "citations": 72,
+                        "works": 17
+            },
+            {
+                        "name": "Hospital del Trabaja",
+                        "researchers": 2,
+                        "h_avg": 2.5,
+                        "h_max": 3,
+                        "citations": 177,
+                        "works": 26
+            },
+            {
+                        "name": "CREA",
+                        "researchers": 1,
+                        "h_avg": 20.0,
+                        "h_max": 20,
+                        "citations": 1974,
+                        "works": 113
+            },
+            {
+                        "name": "Hospital Base",
+                        "researchers": 1,
+                        "h_avg": 7.0,
+                        "h_max": 7,
+                        "citations": 149,
+                        "works": 38
+            },
+            {
+                        "name": "Advanced Center for ",
+                        "researchers": 1,
+                        "h_avg": 7.0,
+                        "h_max": 7,
+                        "citations": 169,
+                        "works": 38
+            },
+            {
+                        "name": "Clinica Santa Maria",
+                        "researchers": 1,
+                        "h_avg": 6.0,
+                        "h_max": 6,
+                        "citations": 135,
+                        "works": 14
+            },
+            {
+                        "name": "Centre For Sustainab",
+                        "researchers": 1,
+                        "h_avg": 4.0,
+                        "h_max": 4,
+                        "citations": 72,
+                        "works": 14
+            },
+            {
+                        "name": "Production Developme",
+                        "researchers": 1,
+                        "h_avg": 4.0,
+                        "h_max": 4,
+                        "citations": 39,
+                        "works": 24
+            },
+            {
+                        "name": "National Monuments C",
+                        "researchers": 1,
+                        "h_avg": 3.0,
+                        "h_max": 3,
+                        "citations": 20,
+                        "works": 7
+            },
+            {
+                        "name": "UA",
+                        "researchers": 1,
+                        "h_avg": 3.0,
+                        "h_max": 3,
+                        "citations": 45,
+                        "works": 3
+            },
+            {
+                        "name": "Las Campanas Observa",
+                        "researchers": 1,
+                        "h_avg": 3.0,
+                        "h_max": 3,
+                        "citations": 34,
+                        "works": 33
+            },
+            {
+                        "name": "Instituto de Salud P",
+                        "researchers": 1,
+                        "h_avg": 3.0,
+                        "h_max": 3,
+                        "citations": 25,
+                        "works": 3
+            },
+            {
+                        "name": "Ministry of Health",
+                        "researchers": 1,
+                        "h_avg": 3.0,
+                        "h_max": 3,
+                        "citations": 28,
+                        "works": 12
+            },
+            {
+                        "name": "Hospital la Serena",
+                        "researchers": 1,
+                        "h_avg": 2.0,
+                        "h_max": 2,
+                        "citations": 15,
+                        "works": 15
+            },
+            {
+                        "name": "Research Center for ",
+                        "researchers": 1,
+                        "h_avg": 2.0,
+                        "h_max": 2,
+                        "citations": 13,
+                        "works": 10
+            },
+            {
+                        "name": "Inria Chile",
+                        "researchers": 1,
+                        "h_avg": 2.0,
+                        "h_max": 2,
+                        "citations": 13,
+                        "works": 5
+            },
+            {
+                        "name": "Hospital Clínico de ",
+                        "researchers": 1,
+                        "h_avg": 2.0,
+                        "h_max": 2,
+                        "citations": 27,
+                        "works": 3
+            },
+            {
+                        "name": "Hospital San Borja A",
+                        "researchers": 1,
+                        "h_avg": 2.0,
+                        "h_max": 2,
+                        "citations": 23,
+                        "works": 17
+            },
+            {
+                        "name": "Universidad del Mar",
+                        "researchers": 1,
+                        "h_avg": 2.0,
+                        "h_max": 2,
+                        "citations": 41,
+                        "works": 5
+            },
+            {
+                        "name": "Universidad UNIACC",
+                        "researchers": 1,
+                        "h_avg": 2.0,
+                        "h_max": 2,
+                        "citations": 14,
+                        "works": 35
+            },
+            {
+                        "name": "Hospital Padre Hurta",
+                        "researchers": 1,
+                        "h_avg": 2.0,
+                        "h_max": 2,
+                        "citations": 18,
+                        "works": 15
+            },
+            {
+                        "name": "Patagonian Ecosystem",
+                        "researchers": 1,
+                        "h_avg": 2.0,
+                        "h_max": 2,
+                        "citations": 75,
+                        "works": 2
+            },
+            {
+                        "name": "Clínica Las Condes",
+                        "researchers": 1,
+                        "h_avg": 2.0,
+                        "h_max": 2,
+                        "citations": 84,
+                        "works": 4
+            }
+];
+        const instList = ["Academy of Christian", "Advanced Center for ", "Alberto Hurtado Univ", "Arturo Prat Universi", "CECS", "CREA", "Catholic University ", "Centre For Sustainab", "Centro Regional de D", "Clinica Santa Maria", "Clínica Alemana", "Clínica Las Condes", "Dirección de Investi", "Facultad Latinoameri", "Fundación Chile", "Hospital Base", "Hospital Clínico de ", "Hospital Las Higuera", "Hospital Padre Hurta", "Hospital San Borja A", "Hospital del Trabaja", "Hospital la Serena", "ICM", "Inria Chile", "Institute of Ecology", "Instituto Nacional d", "Instituto de Salud P", "Las Campanas Observa", "Metropolitan Univers", "Miguel de Cervantes ", "Millennium Institute", "Ministry of Educatio", "Ministry of Health", "National Monuments C", "PUC Chile", "PUCV", "Patagonian Ecosystem", "Production Developme", "Research Center for ", "U. Andes", "U. Chile", "U. Finis Terrae", "U. Los Lagos", "U. Mayor", "U. Talca", "UA", "UA Chile", "UACh", "UAI", "UBB", "UBO", "UC Temuco", "UCEN", "UCN", "UDD", "UDP", "UFRO", "ULAR", "UMAG", "UNAB", "UPLA", "USACH", "USM", "USS", "UST", "UV", "UdeC", "United Nations Econo", "Universidad Adventis", "Universidad Católica", "Universidad UNIACC", "Universidad del Mar", "University of Art an", "University of Atacam", "University of La Ser", "University of O'Higg", "University of Tarapa", "University of the Am", "Viña del Mar Univers"];
 
-        let currentView = 'hindex';
         let currentData = [...researchers];
+
+        // Poblar dropdown de instituciones
+        const instSelect = document.getElementById('filter-inst');
+        instList.forEach(inst => {
+            const opt = document.createElement('option');
+            opt.value = inst;
+            opt.textContent = inst;
+            instSelect.appendChild(opt);
+        });
 
         function formatNumber(n) {
             return n.toLocaleString('es-CL');
@@ -11435,11 +12139,14 @@
             return names[d] || d;
         }
 
-        function setView(view) {
-            currentView = view;
+        function setSection(section) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             event.target.classList.add('active');
-            filterTable();
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById('section-' + section).classList.add('active');
+            if (section === 'institutions') {
+                renderInstTable();
+            }
         }
 
         function renderTable(data) {
@@ -11464,24 +12171,40 @@
             `}).join('');
         }
 
+        function renderInstTable() {
+            const sortBy = document.getElementById('sort-inst').value;
+            const sorted = [...institutions].sort((a, b) => b[sortBy] - a[sortBy]);
+
+            const tbody = document.getElementById('inst-body');
+            tbody.innerHTML = sorted.map((inst, i) => `
+                <tr>
+                    <td><span class="rank-num">${i + 1}</span></td>
+                    <td><span class="inst-name">${inst.name}</span></td>
+                    <td class="num">${inst.researchers}</td>
+                    <td class="num">${inst.h_avg}</td>
+                    <td class="num">${inst.h_max}</td>
+                    <td class="num">${formatNumber(inst.citations)}</td>
+                    <td class="num">${formatNumber(inst.works)}</td>
+                </tr>
+            `).join('');
+        }
+
         function filterTable() {
             const discipline = document.getElementById('filter-discipline').value;
+            const inst = document.getElementById('filter-inst').value;
             const search = document.getElementById('search').value.toLowerCase();
+            const sortBy = document.getElementById('sort-by').value;
 
             currentData = researchers.filter(r => {
                 const matchD = !discipline || r.d1 === discipline;
+                const matchI = !inst || r.affiliation === inst;
                 const matchS = !search ||
                     r.name.toLowerCase().includes(search) ||
-                    r.affiliation.toLowerCase().includes(search) ||
                     r.topics.toLowerCase().includes(search);
-                return matchD && matchS;
+                return matchD && matchI && matchS;
             });
 
-            if (currentView === 'hindex') {
-                currentData.sort((a, b) => b.hindex - a.hindex);
-            } else {
-                currentData.sort((a, b) => b.citations - a.citations);
-            }
+            currentData.sort((a, b) => b[sortBy] - a[sortBy]);
 
             renderTable(currentData);
             updateStats();
@@ -11491,12 +12214,38 @@
             const total = currentData.length;
             const avgH = total > 0 ? (currentData.reduce((s, r) => s + r.hindex, 0) / total).toFixed(1) : 0;
             const totalCitas = currentData.reduce((s, r) => s + r.citations, 0);
-            const institutions = new Set(currentData.map(r => r.affiliation)).size;
+            const insts = new Set(currentData.map(r => r.affiliation)).size;
 
             document.getElementById('stat-total').textContent = total;
             document.getElementById('stat-h').textContent = avgH;
             document.getElementById('stat-citas').textContent = formatNumber(totalCitas);
-            document.getElementById('stat-inst').textContent = institutions;
+            document.getElementById('stat-inst').textContent = insts;
+        }
+
+        function downloadCSV() {
+            const headers = ['Ranking', 'Nombre', 'Institucion', 'Disciplina', 'H-index', 'Citas', 'Trabajos', 'ORCID', 'OpenAlex ID'];
+            const rows = currentData.map((r, i) => [
+                i + 1,
+                r.name,
+                r.affiliation,
+                getDisciplineName(r.d1),
+                r.hindex,
+                r.citations,
+                r.works,
+                r.orcid || '',
+                r.oaid || ''
+            ]);
+
+            let csv = headers.join(',') + '\n';
+            rows.forEach(row => {
+                csv += row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',') + '\n';
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'ranking_ciencias_sociales_chile.csv';
+            link.click();
         }
 
         filterTable();

@@ -158,6 +158,36 @@ def generar_js_array(df):
     return investigadores
 
 
+def generar_ranking_institucional(investigadores):
+    """Genera ranking agregado por institución."""
+    from collections import defaultdict
+
+    inst_data = defaultdict(lambda: {"researchers": 0, "h_sum": 0, "citations": 0, "works": 0, "h_values": []})
+
+    for r in investigadores:
+        inst = r["affiliation"]
+        inst_data[inst]["researchers"] += 1
+        inst_data[inst]["h_sum"] += r["hindex"]
+        inst_data[inst]["h_values"].append(r["hindex"])
+        inst_data[inst]["citations"] += r["citations"]
+        inst_data[inst]["works"] += r["works"]
+
+    ranking = []
+    for inst, data in inst_data.items():
+        ranking.append({
+            "name": inst,
+            "researchers": data["researchers"],
+            "h_avg": round(data["h_sum"] / data["researchers"], 1),
+            "h_max": max(data["h_values"]),
+            "citations": data["citations"],
+            "works": data["works"]
+        })
+
+    # Ordenar por número de investigadores
+    ranking.sort(key=lambda x: x["researchers"], reverse=True)
+    return ranking
+
+
 def generar_html(investigadores):
     """Genera el HTML completo."""
 
@@ -167,8 +197,16 @@ def generar_html(investigadores):
     total_citas = sum(r["citations"] for r in investigadores)
     instituciones = len(set(r["affiliation"] for r in investigadores))
 
+    # Ranking institucional
+    ranking_inst = generar_ranking_institucional(investigadores)
+
+    # Lista de instituciones para el filtro
+    lista_instituciones = sorted(set(r["affiliation"] for r in investigadores))
+
     # Convertir a JSON para JavaScript
     js_data = json.dumps(investigadores, ensure_ascii=False, indent=12)
+    js_inst_data = json.dumps(ranking_inst, ensure_ascii=False, indent=12)
+    js_inst_list = json.dumps(lista_instituciones, ensure_ascii=False)
 
     html = f'''<!DOCTYPE html>
 <html lang="es">
@@ -345,6 +383,25 @@ def generar_html(investigadores):
         .footer-meta {{ font-size: 0.65rem; color: #999; }}
         .footer-meta a {{ color: #666; }}
 
+        .download-btn {{
+            padding: 4px 10px;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            color: #333;
+            text-decoration: none;
+            margin-left: auto;
+        }}
+        .download-btn:hover {{ background: #eee; border-color: #ccc; }}
+
+        .inst-table {{ margin-top: 12px; }}
+        .inst-table th, .inst-table td {{ padding: 6px 10px 6px 0; }}
+        .inst-name {{ font-weight: 600; color: #111; }}
+        .section {{ display: none; }}
+        .section.active {{ display: block; }}
+
         @media (max-width: 768px) {{
             header h1 {{ font-size: 1.1rem; }}
             .stats {{ flex-wrap: wrap; gap: 16px; }}
@@ -391,25 +448,37 @@ def generar_html(investigadores):
         </div>
 
         <div class="tabs">
-            <div class="tab active" onclick="setView('hindex')">Por H-index</div>
-            <div class="tab" onclick="setView('citations')">Por Citas</div>
+            <div class="tab active" onclick="setSection('researchers')">Investigadores</div>
+            <div class="tab" onclick="setSection('institutions')">Por Institucion</div>
         </div>
 
-        <div class="filters">
-            <label for="filter-discipline">Disciplina:</label>
-            <select id="filter-discipline" onchange="filterTable()">
-                <option value="">Todas</option>
-                <option value="C.Pol">Ciencia Politica</option>
-                <option value="Soc">Sociologia</option>
-                <option value="Econ">Economia</option>
-                <option value="Adm">Administracion</option>
-                <option value="Psic">Psicologia</option>
-                <option value="Educ">Educacion</option>
-                <option value="Hum">Humanidades</option>
-                <option value="Com">Comunicacion</option>
-            </select>
-            <input type="text" id="search" placeholder="Buscar nombre o institucion..." oninput="filterTable()">
-        </div>
+        <div id="section-researchers" class="section active">
+            <div class="filters">
+                <label for="filter-discipline">Disciplina:</label>
+                <select id="filter-discipline" onchange="filterTable()">
+                    <option value="">Todas</option>
+                    <option value="C.Pol">Ciencia Politica</option>
+                    <option value="Soc">Sociologia</option>
+                    <option value="Econ">Economia</option>
+                    <option value="Adm">Administracion</option>
+                    <option value="Psic">Psicologia</option>
+                    <option value="Educ">Educacion</option>
+                    <option value="Hum">Humanidades</option>
+                    <option value="Com">Comunicacion</option>
+                </select>
+                <label for="filter-inst">Institucion:</label>
+                <select id="filter-inst" onchange="filterTable()">
+                    <option value="">Todas</option>
+                </select>
+                <input type="text" id="search" placeholder="Buscar nombre..." oninput="filterTable()">
+                <label style="margin-left: 8px;">Ordenar:</label>
+                <select id="sort-by" onchange="filterTable()">
+                    <option value="hindex">H-index</option>
+                    <option value="citations">Citas</option>
+                    <option value="works">Trabajos</option>
+                </select>
+                <button class="download-btn" onclick="downloadCSV()">Descargar CSV</button>
+            </div>
 
         <div class="table-wrapper">
             <table>
@@ -428,6 +497,36 @@ def generar_html(investigadores):
                 </tbody>
             </table>
         </div>
+        </div>
+
+        <div id="section-institutions" class="section">
+            <div class="filters">
+                <label style="margin-left: 0;">Ordenar por:</label>
+                <select id="sort-inst" onchange="renderInstTable()">
+                    <option value="researchers">N de investigadores</option>
+                    <option value="h_avg">H-index promedio</option>
+                    <option value="h_max">H-index maximo</option>
+                    <option value="citations">Citas totales</option>
+                </select>
+            </div>
+            <div class="table-wrapper">
+                <table class="inst-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 35px;">#</th>
+                            <th>Institucion</th>
+                            <th class="num">Investigadores</th>
+                            <th class="num">H-index prom.</th>
+                            <th class="num">H-index max.</th>
+                            <th class="num">Citas</th>
+                            <th class="num">Trabajos</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inst-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
         <footer>
             <div class="methodology">
@@ -445,9 +544,19 @@ def generar_html(investigadores):
 
     <script>
         const researchers = {js_data};
+        const institutions = {js_inst_data};
+        const instList = {js_inst_list};
 
-        let currentView = 'hindex';
         let currentData = [...researchers];
+
+        // Poblar dropdown de instituciones
+        const instSelect = document.getElementById('filter-inst');
+        instList.forEach(inst => {{
+            const opt = document.createElement('option');
+            opt.value = inst;
+            opt.textContent = inst;
+            instSelect.appendChild(opt);
+        }});
 
         function formatNumber(n) {{
             return n.toLocaleString('es-CL');
@@ -470,11 +579,14 @@ def generar_html(investigadores):
             return names[d] || d;
         }}
 
-        function setView(view) {{
-            currentView = view;
+        function setSection(section) {{
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             event.target.classList.add('active');
-            filterTable();
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById('section-' + section).classList.add('active');
+            if (section === 'institutions') {{
+                renderInstTable();
+            }}
         }}
 
         function renderTable(data) {{
@@ -499,24 +611,40 @@ def generar_html(investigadores):
             `}}).join('');
         }}
 
+        function renderInstTable() {{
+            const sortBy = document.getElementById('sort-inst').value;
+            const sorted = [...institutions].sort((a, b) => b[sortBy] - a[sortBy]);
+
+            const tbody = document.getElementById('inst-body');
+            tbody.innerHTML = sorted.map((inst, i) => `
+                <tr>
+                    <td><span class="rank-num">${{i + 1}}</span></td>
+                    <td><span class="inst-name">${{inst.name}}</span></td>
+                    <td class="num">${{inst.researchers}}</td>
+                    <td class="num">${{inst.h_avg}}</td>
+                    <td class="num">${{inst.h_max}}</td>
+                    <td class="num">${{formatNumber(inst.citations)}}</td>
+                    <td class="num">${{formatNumber(inst.works)}}</td>
+                </tr>
+            `).join('');
+        }}
+
         function filterTable() {{
             const discipline = document.getElementById('filter-discipline').value;
+            const inst = document.getElementById('filter-inst').value;
             const search = document.getElementById('search').value.toLowerCase();
+            const sortBy = document.getElementById('sort-by').value;
 
             currentData = researchers.filter(r => {{
                 const matchD = !discipline || r.d1 === discipline;
+                const matchI = !inst || r.affiliation === inst;
                 const matchS = !search ||
                     r.name.toLowerCase().includes(search) ||
-                    r.affiliation.toLowerCase().includes(search) ||
                     r.topics.toLowerCase().includes(search);
-                return matchD && matchS;
+                return matchD && matchI && matchS;
             }});
 
-            if (currentView === 'hindex') {{
-                currentData.sort((a, b) => b.hindex - a.hindex);
-            }} else {{
-                currentData.sort((a, b) => b.citations - a.citations);
-            }}
+            currentData.sort((a, b) => b[sortBy] - a[sortBy]);
 
             renderTable(currentData);
             updateStats();
@@ -526,12 +654,38 @@ def generar_html(investigadores):
             const total = currentData.length;
             const avgH = total > 0 ? (currentData.reduce((s, r) => s + r.hindex, 0) / total).toFixed(1) : 0;
             const totalCitas = currentData.reduce((s, r) => s + r.citations, 0);
-            const institutions = new Set(currentData.map(r => r.affiliation)).size;
+            const insts = new Set(currentData.map(r => r.affiliation)).size;
 
             document.getElementById('stat-total').textContent = total;
             document.getElementById('stat-h').textContent = avgH;
             document.getElementById('stat-citas').textContent = formatNumber(totalCitas);
-            document.getElementById('stat-inst').textContent = institutions;
+            document.getElementById('stat-inst').textContent = insts;
+        }}
+
+        function downloadCSV() {{
+            const headers = ['Ranking', 'Nombre', 'Institucion', 'Disciplina', 'H-index', 'Citas', 'Trabajos', 'ORCID', 'OpenAlex ID'];
+            const rows = currentData.map((r, i) => [
+                i + 1,
+                r.name,
+                r.affiliation,
+                getDisciplineName(r.d1),
+                r.hindex,
+                r.citations,
+                r.works,
+                r.orcid || '',
+                r.oaid || ''
+            ]);
+
+            let csv = headers.join(',') + '\\n';
+            rows.forEach(row => {{
+                csv += row.map(cell => `"${{String(cell).replace(/"/g, '""')}}"`).join(',') + '\\n';
+            }});
+
+            const blob = new Blob([csv], {{ type: 'text/csv;charset=utf-8;' }});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'ranking_ciencias_sociales_chile.csv';
+            link.click();
         }}
 
         filterTable();
