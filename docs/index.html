@@ -131,8 +131,17 @@
         .researcher-name a { color: #111; text-decoration: none; }
         .researcher-name a:hover { text-decoration: underline; }
         .researcher-affiliation { font-size: 0.7rem; color: #666; display: inline; }
-        .orcid-link { font-size: 0.5rem; color: #a6ce39; margin-left: 4px; text-decoration: none; }
-        .orcid-link:hover { text-decoration: underline; }
+        .profile-links { display: inline; margin-left: 4px; }
+        .profile-link {
+            font-size: 0.55rem;
+            padding: 1px 3px;
+            border-radius: 2px;
+            text-decoration: none;
+            margin-left: 2px;
+        }
+        .profile-link.orcid { background: #a6ce39; color: white; }
+        .profile-link.scholar { background: #4285f4; color: white; }
+        .profile-link:hover { opacity: 0.8; }
         .discipline-tag {
             display: inline-block;
             font-size: 0.6rem;
@@ -12152,16 +12161,19 @@
         function renderTable(data) {
             const tbody = document.getElementById('ranking-body');
             tbody.innerHTML = data.map((r, i) => {
-                const nameHtml = r.id
-                    ? `<a href="https://scholar.google.com/citations?user=${r.id}" target="_blank">${r.name}</a>`
-                    : r.name;
-                const orcidHtml = r.orcid
-                    ? `<a href="https://orcid.org/${r.orcid}" target="_blank" class="orcid-link" title="ORCID">iD</a>`
-                    : '';
+                const nameHtml = `<a href="https://openalex.org/authors/${r.oaid}" target="_blank" title="Ver perfil en OpenAlex">${r.name}</a>`;
+                let linksHtml = '<span class="profile-links">';
+                if (r.orcid) {
+                    linksHtml += `<a href="https://orcid.org/${r.orcid}" target="_blank" class="profile-link orcid" title="ORCID">iD</a>`;
+                }
+                if (r.id) {
+                    linksHtml += `<a href="https://scholar.google.com/citations?user=${r.id}" target="_blank" class="profile-link scholar" title="Google Scholar">GS</a>`;
+                }
+                linksHtml += '</span>';
                 return `
                 <tr>
                     <td><span class="rank-num">${i + 1}</span></td>
-                    <td><span class="researcher-name">${nameHtml}</span>${orcidHtml}, <span class="researcher-affiliation">${r.affiliation}</span></td>
+                    <td><span class="researcher-name">${nameHtml}</span>${linksHtml}, <span class="researcher-affiliation">${r.affiliation}</span></td>
                     <td><span class="discipline-tag ${getDisciplineClass(r.d1)}">${getDisciplineName(r.d1)}</span></td>
                     <td><span class="topics">${r.topics}</span></td>
                     <td class="num"><span class="h-value">${r.hindex}</span></td>
