@@ -127,12 +127,23 @@ def generar_js_array(df):
         if pd.isna(orcid):
             orcid = ""
 
+        # OpenAlex ID
+        openalex_id = row.get("openalex_id", "")
+        if pd.isna(openalex_id):
+            openalex_id = ""
+
+        # Trabajos
+        works = row.get("trabajos", 0)
+        if pd.isna(works):
+            works = 0
+
         # Nombre sin caracteres especiales para JS
         nombre = str(row["nombre"]).replace('"', '\\"').replace("'", "\\'")
         nombre = nombre.replace("‐", "-").replace("–", "-")
 
         inv = {
             "id": str(scholar_id),
+            "oaid": str(openalex_id),
             "name": nombre,
             "affiliation": normalizar_institucion(str(row["institucion"])),
             "d1": abreviar_disciplina(str(row["disciplina"])),
@@ -140,6 +151,7 @@ def generar_js_array(df):
             "topics": limpiar_topics(row.get("topics", "")),
             "hindex": int(row["h_index"]),
             "citations": int(row["citas"]),
+            "works": int(works),
         }
         investigadores.append(inv)
 
@@ -184,8 +196,20 @@ def generar_html(investigadores):
             color: #111;
             margin-bottom: 2px;
         }}
-        header .subtitle {{ color: #666; font-size: 0.7rem; }}
-        header .meta {{ margin-top: 4px; font-size: 0.65rem; color: #888; }}
+        header .subtitle {{ color: #666; font-size: 0.75rem; }}
+
+        .description {{
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e5e5;
+        }}
+        .description p {{
+            font-size: 0.75rem;
+            color: #444;
+            margin-bottom: 6px;
+            line-height: 1.5;
+        }}
+        .description a {{ color: #1565c0; }}
+        .description .meta {{ font-size: 0.65rem; color: #888; margin-top: 8px; margin-bottom: 0; }}
 
         .stats {{
             display: flex;
@@ -299,6 +323,8 @@ def generar_html(investigadores):
         .discipline-tag.com {{ background: #e8eaf6; color: #3f51b5; }}
         .h-value {{ font-weight: 700; color: #111; font-size: 0.8rem; }}
         .citation-value {{ color: #555; font-size: 0.8rem; }}
+        .works-link {{ color: #1565c0; text-decoration: none; font-size: 0.8rem; }}
+        .works-link:hover {{ text-decoration: underline; }}
         .topics {{ font-size: 0.65rem; color: #777; max-width: 220px; }}
 
         footer {{
@@ -336,9 +362,14 @@ def generar_html(investigadores):
     <div class="container">
         <header>
             <h1>Ranking Chileno de Ciencias Sociales</h1>
-            <p class="subtitle">Impacto academico basado en metricas de OpenAlex</p>
-            <p class="meta">Actualizacion: {datetime.now().strftime("%B %Y")} | Fuente: OpenAlex API | H-index minimo: 2</p>
+            <p class="subtitle">Impacto academico de investigadores en ciencias sociales en Chile</p>
         </header>
+
+        <div class="description">
+            <p>Este ranking mide el impacto academico de investigadores en ciencias sociales afiliados a instituciones chilenas, utilizando datos de <a href="https://openalex.org/" target="_blank">OpenAlex</a>.</p>
+            <p>El proyecto se inspira en el <a href="https://github.com/bgonzalezbustamante/CPS-Ranking" target="_blank">CPS-Ranking</a> de Bastian Gonzalez-Bustamante, expandiendo la cobertura desde ciencia politica hacia todas las ciencias sociales: sociologia, economia, psicologia, educacion, comunicacion y mas.</p>
+            <p class="meta">Actualizacion: {datetime.now().strftime("%B %Y")} | Fuente: OpenAlex API | H-index minimo: 2</p>
+        </div>
 
         <div class="stats">
             <div class="stat">
@@ -390,6 +421,7 @@ def generar_html(investigadores):
                         <th>Temas de investigacion</th>
                         <th class="num">H-index</th>
                         <th class="num">Citas</th>
+                        <th class="num">Trabajos</th>
                     </tr>
                 </thead>
                 <tbody id="ranking-body">
@@ -462,6 +494,7 @@ def generar_html(investigadores):
                     <td><span class="topics">${{r.topics}}</span></td>
                     <td class="num"><span class="h-value">${{r.hindex}}</span></td>
                     <td class="num"><span class="citation-value">${{formatNumber(r.citations)}}</span></td>
+                    <td class="num"><a href="https://openalex.org/authors/${{r.oaid}}/works" target="_blank" class="works-link" title="Ver trabajos en OpenAlex">${{r.works}}</a></td>
                 </tr>
             `}}).join('');
         }}
