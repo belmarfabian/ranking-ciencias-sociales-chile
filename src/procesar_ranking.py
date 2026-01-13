@@ -78,30 +78,29 @@ CAMPOS_EXCLUIR = [
     "Neuroscience",
 ]
 
-# Scholar IDs conocidos (de nuestro ranking anterior + búsqueda manual)
+# Scholar IDs conocidos (verificados manualmente via Google)
 SCHOLAR_IDS_CONOCIDOS = {
     "David Altman": "oZGkFZoAAAAJ",
     "Cristóbal Rovira Kaltwasser": "RdXwR1EAAAAJ",
     "Patricio Navia": "IBcs-ZwAAAAJ",
-    "Daniel Chernilo": "sHV_7OoAAAAJ",  # Verificar
-    "Juan Carlos Castillo": "yyr6ge0AAAAJ",  # Verificar
+    "Daniel Chernilo": "sHV_7OoAAAAJ",
+    "Juan Carlos Castillo": "CPJ0qfQAAAAJ",
     "Nicolás M. Somma": "yyr6ge0AAAAJ",
     "Mauricio Morales": "BPVbhToAAAAJ",
-    "Matías Bargsted": "5q8wMVcAAAAJ",  # Verificar
-    "Alfredo Joignant": "5q8wMVcAAAAJ",
+    "Matías Bargsted": "0oYjLYEAAAAJ",
+    "Alfredo Joignant": "C6i7344AAAAJ",
     "Emmanuelle Barozet": "NLiNCD0AAAAJ",
     "Émmanuelle Barozet": "NLiNCD0AAAAJ",
     "Sergio Toro": "F7Dguu4AAAAJ",
-    "Ricardo Gamboa": "ckIjzZQAAAAJ",  # Verificar
-    "Magdalena Saldaña": "UknWOrEAAAAJ",  # Verificar
-    "Alejandra Mizala": "zmkA7uwAAAAJ",  # Verificar
-    "Claudio Sapelli": "PWLh77oAAAAJ",  # Verificar
-    "Nicole Jenne": "HaX6qs4AAAAJ",  # Verificar
-    "Catherine Reyes-Housholder": "gkHNPiwAAAAJ",  # Verificar
-    "Octavio Avendaño": "gj1MwGwAAAAJ",  # Verificar
-    "Lisa Zanotti": "JD_X4KYAAAAJ",  # Verificar
-    "Alejandro Micco": "BUc-k1MAAAAJ",  # Verificar
-    "Claudio E. Montenegro": "PWLh77oAAAAJ",  # Verificar
+    "Ricardo Gamboa": "ckIjzZQAAAAJ",
+    "Magdalena Saldaña": "UknWOrEAAAAJ",
+    "Alejandra Mizala": "zmkA7uwAAAAJ",
+    "Nicole Jenne": "HaX6qs4AAAAJ",
+    "Catherine Reyes-Housholder": "gkHNPiwAAAAJ",
+    "Octavio Avendaño": "gj1MwGwAAAAJ",
+    "Lisa Zanotti": "JD_X4KYAAAAJ",
+    "Alejandro Micco": "BUc-k1MAAAAJ",
+    "Claudio E. Montenegro": "qO3kU6UAAAAJ",
 }
 
 
