@@ -80,9 +80,14 @@ CAMPOS_EXCLUIR = [
 
 # Scholar IDs conocidos (verificados manualmente via Google Search)
 SCHOLAR_IDS_CONOCIDOS = {
-    # Top investigadores
+    # Top investigadores por h-index
     "David Altman": "oZGkFZoAAAAJ",
     "Darío Páez": "KVva2AIAAAAJ",
+    "Francisca Fariña Rivera": "4JpTKi0AAAAJ",
+    "Salvador Chacón Moscoso": "LeQUGDIAAAAJ",
+    "Miguel Alfaro": "0zwnLpAAAAAJ",
+    "Juan-Carlos Ferrer": "1N8BNr8AAAAJ",
+    "Juan‐Carlos Ferrer": "1N8BNr8AAAAJ",
     "Cristóbal Rovira Kaltwasser": "RdXwR1EAAAAJ",
     "Alejandro Micco": "BUc-k1MAAAAJ",
     "Claudio E. Montenegro": "qO3kU6UAAAAJ",
@@ -108,24 +113,182 @@ SCHOLAR_IDS_CONOCIDOS = {
     "Antonio Stecher": "rFUqIdsAAAAJ",
     "Felipe Link": "9cxoZ8MAAAAJ",
     "Cristián Cox": "9b8DoS8AAAAJ",
+    "Anahí Urquiza": "eU41CdMAAAAJ",
+    "Luis Quezada": "rVVdDTMAAAAJ",
+    "Felipe González": "dwxwyqwAAAAJ",
+    "Elizabeth Lira": "VDEOCBgAAAAJ",
+    "María Luisa Méndez": "DCQO_AgAAAAJ",
+    "Antoine Maillet": "Y4q4OfoAAAAJ",
+    "Rossana Castiglioni": "gkHNPiwAAAAJ",
+    "Modesto Gayo": "k-2PLOsAAAAJ",
+    "Alejandra Falabella": "G-JkMjwAAAAJ",
+    "Vicente Espinoza": "L8DtBnQAAAAJ",
+    "Caterine Galaz Valderrama": "iBW6M4gAAAAJ",
+    "Mauricio López": "nWzmqycAAAAJ",
+    "Esteban Puentes": "zhJ_wAUAAAAJ",
+    "José Tessada": "i3T7_ocAAAAJ",
+    "Marcela Aracena": "kT-y4RgAAAAJ",
+    "Nicolás Didier": "rDyVn7QAAAAJ",
+    "Eduardo Restrepo": "G51Wqn0AAAAJ",
+    "Héctor López-Ospina": "e_0UrIMAAAAJ",
+    "Iskra Pávez Soto": "PZWoraMAAAAJ",
+    "Jaime Miranda": "wd06koYAAAAJ",
+    "Matías Berthelon": "8nUNv-QAAAAJ",
+    "Pedro Palominos": "Q81kXv4AAAAJ",
+    "Alejandro Corvalán": "KiGpYt4AAAAJ",
+    "Ricardo A. Ayala": "p4WjxQoAAAAJ",
+    "Juan Diego García-Castro": "o_ReskMAAAAJ",
+    "Juan Diego García‐Castro": "o_ReskMAAAAJ",
+    "María Cristina Riff": "V9BgXgMAAAAJ",
+    "Héctor Opazo Carvajal": "gdu2HV8AAAAJ",
+    "Luis Maldonado": "jw0bvrYAAAAJ",
+    "Verónica Gómez Urrutia": "HEFa7TgAAAAJ",
+    "Carlos Rodríguez Garcés": "PQix8vkAAAAJ",
+    "Carmen Gloria Núñez": "3DJ2obYAAAAJ",
+    "Valeria Herrera Fernández": "KpR_9ssAAAAJ",
+    "Alexandre Janiak": "ZUI_nRsAAAAJ",
+    "Francisco Pino": "gglIsfcAAAAJ",
+    "Martina Yopo Díaz": "d_EShyMAAAAJ",
+    "Manuela García Quiroga": "YphStrYAAAAJ",
+    "Carmen Le Foulon": "wRPMNvUAAAAJ",
+    "Carlos Villalobos Barría": "ys7_WJsAAAAJ",
+    "Alexander Panez Pinto": "j0jLMmUAAAAJ",
+    "Francisco Soto": "bQFVXJIAAAAJ",
+    "Felipe Agüero": "JSPWdfYAAAAJ",
+    "Juan Carlos Peña Axt": "M1HHaLAAAAAJ",
+    "Lyonel Laulié": "YrUlat4AAAAJ",
+    "María Emilia Tijoux": "w4yfwDwAAAAJ",
+    "Macarena Trujillo Cristoffanini": "WUBNh6cAAAAJ",
+    "Gianinna Muñoz Arce": "69DPxiIAAAAJ",
+    "Cristóbal Villalobos Dintrans": "2Luja0YAAAAJ",
+    "Alicia Salomone": "dt0d5aYAAAAJ",
+    "Jeanne W. Simon": "_mHLvikAAAAJ",
+    "Pablo Camus": "__gOnGQAAAAJ",
+    "Taly Reininger": "s-2CFoYAAAAJ",
+    "Rodrigo Medel Sierralta": "nYgItkMAAAAJ",
+    "Rodrigo M. Medel": "nYgItkMAAAAJ",
+    "María Teresa Rojas Fabris": "FJPZ-FMAAAAJ",
+    "Pamela Soto García": "LHY0duUAAAAJ",
+    "Carlos Durán Migliardi": "B4nKyykAAAAJ",
+    "Lorena Pérez-Roa": "6fbnHhQAAAAJ",
+    "Nelson Arellano Escudero": "feRyeYcAAAAJ",
+    "Rodrigo A. Asún": "airlFmQAAAAJ",
+    "Rodrigo Asún": "airlFmQAAAAJ",
+    "Camila Moyano Dávila": "Z_5xEkIAAAAJ",
+    "Claudia Zúñiga": "PrpjOXQAAAAJ",
+    "Javiera Cienfuegos Illanes": "VZBKOLsAAAAJ",
+    "Cristián Bellei": "UeodjIAAAAAJ",
+    "Cristian Bellei": "UeodjIAAAAAJ",
+    "Mauro Basaure": "JPWSU2wAAAAJ",
+    "Carolina Stefoni": "p86gQo0AAAAJ",
+    "Silvia Lamadrid Alvarez": "t6B1cxEAAAAJ",
+    "Silvia Lamadrid": "t6B1cxEAAAAJ",
+    "Javier Ruiz-Tagle": "os329F8AAAAJ",
+    "Oscar Landerretche": "W6oI2LsAAAAJ",
+    "Gonzalo Martner": "7OcQ0PoAAAAJ",
+    "Eduardo Engel": "PWLh77oAAAAJ",
+    "Pablo Marshall": "HzOFxjoAAAAJ",
+    "Pablo Geraldo Bastías": "JrrvH-oAAAAJ",
+    "Andrea Riedemann": "KnrUWzEAAAAJ",
+    "Pablo Pérez Ahumada": "I-bh4HoAAAAJ",
+    "Kathya Araujo": "nukHXv0AAAAJ",
+    "Fernando Atria": "InrV7oEAAAAJ",
+    "Martín Tironi": "_CTu_voAAAAJ",
+    "Tomás Ariztía": "FpyJ96kAAAAJ",
+    "Eugenio Tironi": "8g7eKDcAAAAJ",
+    "Claudia Sanhueza": "kuProYAAAAAJ",
+    "Dante Contreras": "BUc-k1MAAAAJ",
+    "Carlos Huneeus": "Kq4dWnoAAAAJ",
+    "Juan Pablo Luna": "IgwSc8oAAAAJ",
+    "Florencia Torche": "HjhELVoAAAAJ",
+    "Rodrigo Valdés": "vfhPXR4AAAAJ",
+    "Andrea Repetto": "zmkA7uwAAAAJ",
+    "Sergio Urzúa": "UGlSd5kAAAAJ",
+    "Francisco A. Gallego": "l7Q0SrUAAAAJ",
+    "Francisco Gallego": "l7Q0SrUAAAAJ",
+    "José De Gregorio": "SJUEA8uk4iYC",
+    "Claudia Mora": "psDDX5MAAAAJ",
+    "Juan Carlos Oyanedel": "UsXLvsEAAAAJ",
+    "Ernesto López-Morales": "5w40_sYAAAAJ",
+    "Ernesto López Morales": "5w40_sYAAAAJ",
+    "Luis Garrido-Vergara": "DlO0jXVS4FIC",
+    "Luis Garrido Vergara": "DlO0jXVS4FIC",
+    "José Weinstein": "XrZEaYcAAAAJ",
+    "Gonzalo Muñoz Stuardo": "rC7E0W8AAAAJ",
+    "Sergio Martinic": "P3vUyD8AAAAJ",
+    "Osvaldo Sunkel": "GEuJF0cAAAAJ",
+    "Aldo Mascareño": "7H4k-70AAAAJ",
+    "Arturo Arriagada": "TzPYdWsAAAAJ",
+    "José Joaquín Brunner": "TX3te0QAAAAJ",
+    "Pedro Güell": "KaRIsccAAAAJ",
     # Otros investigadores
     "Matías Bargsted": "0oYjLYEAAAAJ",
     "Alfredo Joignant": "C6i7344AAAAJ",
     "Emmanuelle Barozet": "NLiNCD0AAAAJ",
     "Émmanuelle Barozet": "NLiNCD0AAAAJ",
     "Sergio Toro": "F7Dguu4AAAAJ",
-    "Ricardo Gamboa": "ckIjzZQAAAAJ",
+    "Ricardo Gamboa": "nOBjxWUAAAAJ",
+    "Ricardo Gamboa Valenzuela": "nOBjxWUAAAAJ",
+    "Claudio Fuentes": "ckIjzZQAAAAJ",
     "Magdalena Saldaña": "UknWOrEAAAAJ",
-    "Catherine Reyes-Housholder": "gkHNPiwAAAAJ",
+    "Catherine Reyes-Housholder": "8WfwsloAAAAJ",
     "Octavio Avendaño": "gj1MwGwAAAAJ",
     "Lisa Zanotti": "JD_X4KYAAAAJ",
     "Carla Fardella": "h9ECWD4AAAAJ",
+    "Manuel Canales Cerón": "VUBBRpoAAAAJ",
+    "Manuel Canales": "VUBBRpoAAAAJ",
+    # Nuevos IDs agregados (búsqueda 2026-01-14)
+    "F. Daniel Hidalgo": "r-UN7tMAAAAJ",
+    "Marcelo Arnold-Cathalifaud": "0eZSQEkAAAAJ",
+    "Marcelo Arnold": "0eZSQEkAAAAJ",
+    "Rodrigo Cordero": "22ynv5cAAAAJ",
+    "Jorge Atria Curi": "6lYgX_0AAAAJ",
+    "Jorge Atria": "6lYgX_0AAAAJ",
+    "Antonio Elizalde": "egxxLU0AAAAJ",
+    "Matias López": "_y8jWtcAAAAJ",
+    "Verónica Gubbins Foxley": "tW__CQYAAAAJ",
+    "Verónica Gubbins": "tW__CQYAAAAJ",
+    "Felipe Torres Torres": "8bXFNDIAAAAJ",
+    "Felipe Torres": "8bXFNDIAAAAJ",
+    "Francisca Dussaillant": "6XHFLYQAAAAJ",
+    "Óscar Mac-Clure": "XmHLcYkAAAAJ",
+    "Oscar Mac-Clure": "XmHLcYkAAAAJ",
+    "Carlos Calvo Muñoz": "Sc7FKWEAAAAJ",
+    "Carlos Calvo": "Sc7FKWEAAAAJ",
+    "Álvaro Besoaín Saldaña": "zt_Pe8wAAAAJ",
+    "Alvaro Besoain Saldaña": "zt_Pe8wAAAAJ",
+    "Facundo Sepúlveda": "8yeHoG8AAAAJ",
+    "Facundo Sepulveda": "8yeHoG8AAAAJ",
+    "César A. Cisneros Puebla": "k7EIK5UAAAAJ",
+    "César Cisneros Puebla": "k7EIK5UAAAAJ",
+    "Daina Bellido de Luna": "LqFe6MQAAAAJ",
+    "Juan Pablo Venables": "OQM9rGQAAAAJ",
+    "Juan Pablo Paredes P": "keKcSfsAAAAJ",
+    "Juan Pablo Paredes": "keKcSfsAAAAJ",
+    "Juan Pablo Pinilla": "HsctFRkAAAAJ",
+    "Kenneth Bunker": "kFHaW6wAAAAJ",
+    "Álvaro V. Ramírez-Alujas": "MMCj-VQAAAAJ",
+    "Álvaro Ramírez-Alujas": "MMCj-VQAAAAJ",
+    "Daniel Miranda": "vdF2kZcAAAAJ",
+    "Rodrigo Mardones": "5cAowpkAAAAJ",
 }
 
 
 def cargar_datos(filepath: Path) -> pd.DataFrame:
-    """Carga el CSV de OpenAlex."""
+    """Carga el CSV de OpenAlex y normaliza nombres de columnas."""
     df = pd.read_csv(filepath, encoding="utf-8-sig")
+
+    # Normalizar nombres de columnas para compatibilidad entre formatos
+    column_mapping = {
+        "cited_by_count": "citas",
+        "pais": "pais_institucion",
+    }
+    df = df.rename(columns={k: v for k, v in column_mapping.items() if k in df.columns})
+
+    # Asegurar que existe columna 'citas'
+    if "citas" not in df.columns and "cited_by_count" not in df.columns:
+        df["citas"] = 0
+
     print(f"Cargados {len(df)} investigadores")
     return df
 
@@ -148,8 +311,11 @@ def limpiar_datos(df: pd.DataFrame) -> pd.DataFrame:
     df = df[~df["campo_principal"].isin(CAMPOS_EXCLUIR)]
     print(f"  Después de excluir campos: {len(df)}")
 
-    # 4. Solo país Chile
-    df = df[df["pais_institucion"] == "CL"]
+    # 4. Solo país Chile (compatible con ambos formatos)
+    if "pais_institucion" in df.columns:
+        df = df[df["pais_institucion"] == "CL"]
+    elif "pais" in df.columns:
+        df = df[df["pais"] == "CL"]
     print(f"  Después de filtrar país CL: {len(df)}")
 
     print(f"Eliminados {n_inicial - len(df)} registros en limpieza")
@@ -290,6 +456,7 @@ def generar_json_web(df: pd.DataFrame, output_path: Path):
             "id": row.get("scholar_id", "") or row.get("openalex_id", ""),
             "openalex_id": row.get("openalex_id", ""),
             "orcid": row.get("orcid", ""),
+            "scholar_id": row.get("scholar_id", ""),
             "name": row["nombre"],
             "affiliation": normalizar_institucion(row["institucion"]),
             "d1": abreviar_disciplina(row["disciplina"]),
@@ -370,8 +537,11 @@ def main():
     print("="*60)
     print(f"Fecha: {datetime.now().strftime('%Y-%m-%d %H:%M')}\n")
 
-    # Buscar archivo más reciente de OpenAlex
+    # Buscar archivo más reciente de OpenAlex (en output/ o raw/)
     archivos = list(OUTPUT_DIR.glob("investigadores_openalex_*.csv"))
+    raw_dir = OUTPUT_DIR.parent / "raw"
+    if raw_dir.exists():
+        archivos.extend(list(raw_dir.glob("investigadores_openalex_*.csv")))
     if not archivos:
         print("ERROR: No se encontró archivo de OpenAlex")
         return
